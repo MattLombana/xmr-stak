@@ -107,7 +107,7 @@ void help()
 #endif
 	std::string algos;
 	jconf::GetAlgoList(algos);
-	cout<< "Supported coin opitons: " << endl << algos << endl; 
+	cout<< "Supported coin opitons: " << endl << algos << endl;
 	cout<< "Version: " << get_version_str_short() << endl;
 	cout<<"Brought to by fireice_uk and psychocrypt under GPLv3."<<endl;
 }
@@ -147,7 +147,7 @@ std::string get_multipool_entry(bool& final)
 	std::cin.clear(); std::cin.ignore(INT_MAX,'\n');
 	std::cout<<"- Password (mostly empty or x):"<<std::endl;
 	getline(std::cin, passwd);
-	
+
 	std::string rigid;
 	std::cout<<"- Rig identifier for pool-side statistics (needs pool support). Can be empty:"<<std::endl;
 	getline(std::cin, rigid);
@@ -171,7 +171,7 @@ std::string get_multipool_entry(bool& final)
 	final = !read_yes_no("- Do you want to add another pool? (y/n)");
 
 	return "\t{\"pool_address\" : \"" + pool +"\", \"wallet_address\" : \"" + userName + "\", \"rig_id\" : \"" + rigid +
-		"\", \"pool_password\" : \"" + passwd + "\", \"use_nicehash\" : " + bool_to_str(nicehash) + ", \"use_tls\" : " + 
+		"\", \"pool_password\" : \"" + passwd + "\", \"use_nicehash\" : " + bool_to_str(nicehash) + ", \"use_tls\" : " +
 		bool_to_str(tls) + ", \"tls_fingerprint\" : \"\", \"pool_weight\" : " + std::to_string(pool_weight) + " },\n";
 }
 
@@ -210,7 +210,7 @@ void do_guided_pool_config()
 			std::cout << "- Please enter the currency that you want to mine: "<<std::endl;
 			std::cout << list << std::endl;
 			std::cin >> tmp;
-		} 
+		}
 		currency = tmp;
 	}
 
@@ -298,7 +298,7 @@ void do_guided_pool_config()
 		std::cout << "Miner will mine mostly at the pool with the highest weight, unless the pool fails." << std::endl;
 		std::cout << "Weight must be an integer larger than 0." << std::endl;
 		std::cout << "- Please enter a weight for this pool: "<<std::endl;
-		
+
 		while(!(std::cin >> pool_weight) || pool_weight <= 0)
 		{
 			std::cin.clear();
@@ -311,7 +311,7 @@ void do_guided_pool_config()
 
 	std::string pool_table;
 	pool_table += "\t{\"pool_address\" : \"" + pool +"\", \"wallet_address\" : \"" + userName +  "\", \"rig_id\" : \"" + rigid +
-		"\", \"pool_password\" : \"" +  passwd + "\", \"use_nicehash\" : " + bool_to_str(nicehash) + ", \"use_tls\" : " + 
+		"\", \"pool_password\" : \"" +  passwd + "\", \"use_nicehash\" : " + bool_to_str(nicehash) + ", \"use_tls\" : " +
 		bool_to_str(tls) + ", \"tls_fingerprint\" : \"\", \"pool_weight\" : " + std::to_string(pool_weight) + " },\n";
 
 	if(multipool)
@@ -574,7 +574,7 @@ int main(int argc, char *argv[])
 				win_exit();
 				return 1;
 			}
-			
+
 			params::inst().userSetRigid = true;
 			params::inst().poolRigid = argv[i];
 		}
@@ -729,7 +729,7 @@ int main(int argc, char *argv[])
 		printer::inst()->print_str("!!!! Doing only a benchmark and exiting. To mine, remove the '--benchmark' option. !!!!\n");
 		return do_benchmark(params::inst().benchmark_block_version);
 	}
-	
+
 	executor::inst()->ex_start(jconf::inst()->DaemonMode());
 
 	uint64_t lastTime = get_timestamp_ms();
