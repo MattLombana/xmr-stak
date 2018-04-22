@@ -35,8 +35,8 @@ private:
 
 	minethd(miner_work& pWork, size_t iNo, int iMultiway, bool no_prefetch, int64_t affinity);
 
-	template<size_t N>
-	void multiway_work_main(cn_hash_fun_multi hash_fun_multi);
+	template<uint32_t N>
+	void multiway_work_main();
 
 	template<size_t N>
 	void prep_multiway_work(uint8_t *bWorkBlob, uint32_t **piNonce);
@@ -65,4 +65,4 @@ private:
 };
 
 } // namespace cpu
-} // namepsace xmrstak
+} // namespace xmrstak

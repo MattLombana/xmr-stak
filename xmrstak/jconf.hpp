@@ -1,7 +1,7 @@
 #pragma once
 
-#include "xmrstak/backend/cryptonight.hpp"
 #include "xmrstak/misc/environment.hpp"
+#include "xmrstak/misc/coinDescription.hpp"
 #include "params.hpp"
 
 #include <stdlib.h>
@@ -48,8 +48,8 @@ public:
 
 	bool TlsSecureAlgos();
 
-	inline xmrstak_algo GetMiningAlgo() { return mining_algo; }
-	
+	inline xmrstak::coin_selection GetCurrentCoinSelection() const { return currentCoin; }
+
 	std::string GetMiningCoin();
 
 	static void GetAlgoList(std::string& list);
@@ -90,5 +90,5 @@ private:
 	opaque_private* prv;
 
 	bool bHaveAes;
-	xmrstak_algo mining_algo;
+	xmrstak::coin_selection currentCoin;
 };

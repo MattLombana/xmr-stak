@@ -229,7 +229,7 @@ void jpsock::jpsock_thread()
 	else
 		disconnect_time = 0;
 
-	std::unique_lock<std::mutex>(job_mutex);
+	std::unique_lock<std::mutex> lck(job_mutex);
 	memset(&oCurrentJob, 0, sizeof(oCurrentJob));
 	bRunning = false;
 }
@@ -305,6 +305,12 @@ bool jpsock::process_line(char* line, size_t len)
 
 		if(!mt->IsString())
 			return set_socket_error("PARSE error: Protocol error 1");
+
+		if(strcmp(mt->GetString(), "mining.set_extranonce") == 0)
+		{
+			printer::inst()->print_msg(L0, "Detected buggy NiceHash pool code. Workaround engaged.");
+			return true;
+		}
 
 		if(strcmp(mt->GetString(), "job") != 0)
 			return set_socket_error("PARSE error: Unsupported server method ", mt->GetString());
@@ -433,7 +439,7 @@ bool jpsock::process_pool_job(const opq_json_val* params)
 
 	if(motd != nullptr && motd->IsString() && (motd->GetStringLength() & 0x01) == 0)
 	{
-		std::unique_lock<std::mutex>(motd_mutex);
+		std::unique_lock<std::mutex> lck(motd_mutex);
 		if(motd->GetStringLength() > 0)
 		{
 			pool_motd.resize(motd->GetStringLength()/2 + 1);
@@ -448,7 +454,7 @@ bool jpsock::process_pool_job(const opq_json_val* params)
 
 	executor::inst()->push_event(ex_event(oPoolJob, pool_id));
 
-	std::unique_lock<std::mutex>(job_mutex);
+	std::unique_lock<std::mutex> lck(job_mutex);
 	oCurrentJob = oPoolJob;
 	return true;
 }
@@ -643,7 +649,13 @@ bool jpsock::cmd_submit(const char* sJobId, uint32_t iNonce, const uint8_t* bRes
 			algo_name = "cryptonight-lite";
 			break;
 		case cryptonight_monero:
-			algo_name = "cryptonight-monero";
+			algo_name = "cryptonight-monerov7";
+			break;
+		case cryptonight_aeon:
+			algo_name = "cryptonight-aeonv7";
+			break;
+		case cryptonight_heavy:
+			algo_name = "cryptonight-heavy";
 			break;
 		default:
 			algo_name = "unknown";
@@ -668,13 +680,13 @@ bool jpsock::cmd_submit(const char* sJobId, uint32_t iNonce, const uint8_t* bRes
 
 void jpsock::save_nonce(uint32_t nonce)
 {
-	std::unique_lock<std::mutex>(job_mutex);
+	std::unique_lock<std::mutex> lck(job_mutex);
 	oCurrentJob.iSavedNonce = nonce;
 }
 
 bool jpsock::get_current_job(pool_job& job)
 {
-	std::unique_lock<std::mutex>(job_mutex);
+	std::unique_lock<std::mutex> lck(job_mutex);
 
 	if(oCurrentJob.iWorkLen == 0)
 		return false;
@@ -688,7 +700,7 @@ bool jpsock::get_pool_motd(std::string& strin)
 	if(!ext_motd)
 		return false;
 
-	std::unique_lock<std::mutex>(motd_mutex);
+	std::unique_lock<std::mutex> lck(motd_mutex);
 	if(pool_motd.size() > 0)
 	{
 		strin.assign(pool_motd);
