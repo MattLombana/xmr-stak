@@ -417,7 +417,7 @@ bool jpsock::process_pool_job(const opq_json_val* params)
 		if(!hex2bin(sTempStr, 8, (unsigned char*)&iTempInt) || iTempInt == 0)
 			return set_socket_error("PARSE error: Invalid target");
 
-		
+
 		oPoolJob.iTarget = t32_to_t64(iTempInt);
 	}
 	else if(target_slen <= 16)
@@ -583,7 +583,7 @@ bool jpsock::cmd_login()
 		for(size_t i=0; i < ext->Size(); i++)
 		{
 			const Value& jextname = ext->GetArray()[i];
-			
+
 			if(!jextname.IsString())
 				continue;
 
@@ -614,6 +614,7 @@ bool jpsock::cmd_login()
 	return true;
 }
 
+// selfish mining: method to submit block to network
 bool jpsock::cmd_submit(const char* sJobId, uint32_t iNonce, const uint8_t* bResult, const char* backend_name, uint64_t backend_hashcount, uint64_t total_hashcount, xmrstak_algo algo)
 {
 	char cmd_buffer[1024];
@@ -684,7 +685,7 @@ bool jpsock::get_current_job(pool_job& job)
 
 bool jpsock::get_pool_motd(std::string& strin)
 {
-	if(!ext_motd) 
+	if(!ext_motd)
 		return false;
 
 	std::unique_lock<std::mutex>(motd_mutex);

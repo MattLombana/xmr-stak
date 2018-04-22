@@ -406,6 +406,7 @@ void executor::on_pool_have_job(size_t pool_id, pool_job& oPoolJob)
 		printer::inst()->print_msg(L3, "New block detected.");
 }
 
+// selfish mining: check this out
 void executor::on_miner_result(size_t pool_id, job_result& oResult)
 {
 	jpsock* pool = pick_pool_by_id(pool_id);
@@ -598,7 +599,6 @@ void executor::ex_main()
 	size_t cnt = 0;
 	while (true)
 	{
-		std::cout << "In message loop";
 		ev = oEventQ.pop();
 		switch (ev.iName)
 		{
@@ -615,7 +615,6 @@ void executor::ex_main()
 			break;
 
 		case EV_MINER_HAVE_RESULT:
-			std::cout << "Have result";
 			on_miner_result(ev.iPoolId, ev.oJobResult);
 			break;
 
